@@ -1,1 +1,46 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap");
+
+* {
+  font-family: "Inter", sans-serif;
+}
+
+/* Custom golden checkbox */
+.golden-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #4e4633;
+  border-radius: 4px;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.golden-checkbox:checked {
+  background-color: #f5c518;
+  border-color: #f5c518;
+}
+
+.golden-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #0a0a0a;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.golden-checkbox:focus {
+  outline: none;
+  border-color: #f5c518;
+  box-shadow: 0 0 0 2px rgba(245, 197, 24, 0.15);
+}
+

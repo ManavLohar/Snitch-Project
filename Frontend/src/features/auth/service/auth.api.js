@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const authApi = axios.create({
-  baseURL: "http://localhost:3000/api/auth",
+  baseURL: "/api/auth",
   withCredentials: true,
 });
 
@@ -20,4 +20,9 @@ export async function register({
     isSeller,
   });
   return response.data;
+}
+
+export async function login({ email, password }) {
+  const res = await authApi.post("/login", { email, password });
+  return res.data;
 }

@@ -26,3 +26,13 @@ export const validateRegisterUser = [
   body("isSeller").isBoolean().withMessage("isSeller must be a boolean value!"),
   validateRequest,
 ];
+
+export const validateLoginUser = [
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required!")
+    .isEmail()
+    .withMessage("Invalid email address!"),
+
+  validateRequest,
+];
