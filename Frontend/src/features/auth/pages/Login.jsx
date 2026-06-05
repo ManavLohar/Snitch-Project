@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import ContinueWithGoogle from "../components/ContinueWithGoogle";
 
 const Login = () => {
   const { handleLogin } = useAuth();
@@ -140,6 +141,7 @@ const Login = () => {
             >
               Sign In
             </button>
+            <ContinueWithGoogle />
           </form>
 
           <div className="mt-8 text-center">

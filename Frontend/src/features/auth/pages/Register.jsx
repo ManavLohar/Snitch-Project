@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import ContinueWithGoogle from "../components/ContinueWithGoogle";
 
 const Register = () => {
   const { handleRegister } = useAuth();
@@ -177,17 +178,13 @@ const Register = () => {
                 Sell on Snitch?
               </label>
             </div>
-
-            <a href="/api/auth/google" className="text-white">
-              Continue with google
-            </a>
-
             <button
               type="submit"
               className="w-full bg-[#F5C518] text-[#0a0a0a] font-semibold py-3.5 rounded-lg mt-6 hover:bg-[#d4a810] transition-colors"
             >
               Create Account
             </button>
+            <ContinueWithGoogle />
           </form>
 
           <div className="mt-8 text-center">
