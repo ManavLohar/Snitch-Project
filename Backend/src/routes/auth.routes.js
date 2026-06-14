@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getMe,
   googleCallback,
   login,
   register,
@@ -9,6 +10,7 @@ import {
   validateRegisterUser,
 } from "../validator/auth.validator.js";
 import passport from "passport";
+import { authenticateUser } from "../middlewares/auth.middleware.js";
 
 const authRouter = Router();
 
@@ -26,6 +28,7 @@ authRouter
       failureRedirect: "http://localhost:5173/login",
     }),
     googleCallback,
-  );
+  )
+  .get("/get-me", authenticateUser, getMe);
 
 export { authRouter };

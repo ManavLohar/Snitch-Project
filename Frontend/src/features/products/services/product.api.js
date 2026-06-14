@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const productApiInstance = axios.create({
-  baseURL: "/api/product",
+  baseURL: "/api/products",
   withCredentials: true,
 });
 
@@ -10,7 +10,17 @@ export async function createProduct(formData) {
   return response.data;
 }
 
-export async function getAllProducts() {
+export async function getSellerProducts() {
   const res = await productApiInstance.get("/seller");
+  return res.data;
+}
+
+export async function getAllProducts() {
+  const res = await productApiInstance.get("/");
+  return res.data;
+}
+
+export async function getProductById({ productId }) {
+  const res = await productApiInstance.get(`/?productId=${productId}`);
   return res.data;
 }

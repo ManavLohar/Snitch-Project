@@ -1,7 +1,12 @@
 import { Router } from "express";
-import { authenticateSeller } from "../middlewares/auth.middleware.js";
+import {
+  authenticateSeller,
+  authenticateUser,
+} from "../middlewares/auth.middleware.js";
 import {
   createProduct,
+  getAllProducts,
+  getProduct,
   getSellerProducts,
 } from "../controllers/product.controller.js";
 import multer from "multer";
@@ -24,6 +29,7 @@ productRouter
     createProductValidator,
     createProduct,
   )
-  .get("/seller", authenticateSeller, getSellerProducts);
+  .get("/seller", authenticateSeller, getSellerProducts)
+  .get("/", getAllProducts);
 
 export { productRouter };

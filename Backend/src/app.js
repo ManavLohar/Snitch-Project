@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRouter);
-app.use("/api/product", productRouter);
+app.use("/api/products", productRouter);
 
 app.use(passport.initialize());
 

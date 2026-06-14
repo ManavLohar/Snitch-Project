@@ -42,3 +42,33 @@ export const getSellerProducts = async (req, res) => {
     products,
   });
 };
+
+export const getAllProducts = async (req, res) => {
+  const { productId } = req.query;
+  console.log(productId);
+
+  let products;
+  let product;
+
+  if (productId) {
+    product = await ProductModel.findOne({ _id: productId });
+  } else {
+    products = await ProductModel.find();
+  }
+
+  return res.status(200).json({
+    message: "Products fetched successfully!",
+    success: true,
+    products: products ? products : product,
+  });
+};
+
+export const getProduct = async (req, res) => {
+  const productId = req.query.productId;
+  const product = await ProductModel.findOne({ _id: productId });
+  return res.status(200).json({
+    message: "Product fetched successfully!",
+    success: true,
+    product,
+  });
+};

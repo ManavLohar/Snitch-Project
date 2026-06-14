@@ -23,8 +23,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await handleLogin(formData);
-      navigate("/");
+      const user = await handleLogin(formData);
+      if (user?.role === "seller") {
+        navigate("/seller/dashboard");
+      } else if (user?.role === "buyer") {
+        navigate("/");
+      }
     } catch (error) {
       console.error("Login failed", error);
     }
