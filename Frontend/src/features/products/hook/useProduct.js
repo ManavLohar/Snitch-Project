@@ -4,11 +4,15 @@ import {
   getAllProducts,
   getProductById,
   getSellerProducts,
+  addProductVariant,
+  updateVariantStock,
+  deleteVariant,
 } from "../services/product.api";
 import { setProducts, setSellerProducts } from "../state/product.slice";
 
 export const useProduct = () => {
   const dispatch = useDispatch();
+
   const handleCreateProduct = async (formData) => {
     const data = await createProduct(formData);
     return data.product;
@@ -30,10 +34,28 @@ export const useProduct = () => {
     return data.products;
   };
 
+  const handleAddProductVariant = async ({ productId, formData }) => {
+    const data = await addProductVariant({ productId, formData });
+    return data;
+  };
+
+  const handleUpdateVariantStock = async ({ productId, variantId, stock }) => {
+    const data = await updateVariantStock({ productId, variantId, stock });
+    return data;
+  };
+
+  const handleDeleteVariant = async ({ productId, variantId }) => {
+    const data = await deleteVariant({ productId, variantId });
+    return data;
+  };
+
   return {
     handleCreateProduct,
     handleGetProducts,
     handleGetAllProducts,
     handleGetProductById,
+    handleAddProductVariant,
+    handleUpdateVariantStock,
+    handleDeleteVariant,
   };
 };

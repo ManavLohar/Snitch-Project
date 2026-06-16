@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useProduct } from "../hook/useProduct";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { handleGetProducts } = useProduct();
   const { sellerProducts } = useSelector((state) => state.product);
 
@@ -49,6 +51,7 @@ const Dashboard = () => {
             sellerProducts.map((product) => (
               <div
                 key={product._id}
+                onClick={() => navigate(`/seller/product/${product._id}`)}
                 style={{
                   backgroundColor: "#1A1A1A",
                   borderRadius: "8px",

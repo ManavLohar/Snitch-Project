@@ -4,6 +4,7 @@ import {
   authenticateUser,
 } from "../middlewares/auth.middleware.js";
 import {
+  addProductVariant,
   createProduct,
   getAllProducts,
   getProduct,
@@ -30,6 +31,12 @@ productRouter
     createProduct,
   )
   .get("/seller", authenticateSeller, getSellerProducts)
-  .get("/", getAllProducts);
+  .get("/", getAllProducts)
+  .post(
+    "/:productId/variants",
+    authenticateSeller,
+    upload.array("images", 7),
+    addProductVariant,
+  );
 
 export { productRouter };
