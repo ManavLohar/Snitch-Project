@@ -8,16 +8,10 @@ import Protected from "../features/auth/components/Protected";
 import Home from "../features/products/pages/Home";
 import Product from "../features/products/pages/Product";
 import SellerProductsDetails from "../features/products/pages/SellerProductsDetails";
+import Cart from "../features/cart/pages/Cart";
+import AppLayout from "./AppLayout";
 
 export const routes = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/product/:productId",
-    element: <Product />,
-  },
   {
     path: "/register",
     element: <Register />,
@@ -27,31 +21,52 @@ export const routes = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/seller",
+    element: <AppLayout />,
     children: [
       {
-        path: "create-product",
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/product/:productId",
+        element: <Product />,
+      },
+      {
+        path: "/cart",
         element: (
-          <Protected role="seller">
-            <CreateProduct />
+          <Protected>
+            <Cart />
           </Protected>
         ),
       },
       {
-        path: "dashboard",
-        element: (
-          <Protected role="seller">
-            <Dashboard />
-          </Protected>
-        ),
-      },
-      {
-        path: "product/:productId",
-        element: (
-          <Protected role="seller">
-            <SellerProductsDetails />
-          </Protected>
-        ),
+        path: "/seller",
+        children: [
+          {
+            path: "create-product",
+            element: (
+              <Protected role="seller">
+                <CreateProduct />
+              </Protected>
+            ),
+          },
+          {
+            path: "dashboard",
+            element: (
+              <Protected role="seller">
+                <Dashboard />
+              </Protected>
+            ),
+          },
+          {
+            path: "product/:productId",
+            element: (
+              <Protected role="seller">
+                <SellerProductsDetails />
+              </Protected>
+            ),
+          },
+        ],
       },
     ],
   },

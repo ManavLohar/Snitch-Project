@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router";
 import { useProduct } from "../hook/useProduct";
-import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
+import { useCart } from "../../cart/hook/useCart";
 
 /* ─── Accordion Item ──────────────────────────────────────────────────── */
 const AccordionItem = ({ title, children }) => {
@@ -107,6 +107,81 @@ const Product = () => {
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
   const [buyingNow, setBuyingNow] = useState(false);
+  const [selectedAttributes, setSelectedAttributes] = useState({});
+  const { handleAddItem } = useCart();
+
+  useEffect(() => {
+    if (product?.variants?.length > 0) {
+      setSelectedAttributes(product.variants[0].attributes || {});
+    }
+  }, [product]);
+
+  const availableAttributes = React.useMemo(() => {
+    const attrMap = {};
+    if (product?.variants) {
+      product.variants.forEach((variant) => {
+        if (variant.attributes) {
+          Object.entries(variant.attributes).forEach(([key, value]) => {
+            if (!attrMap[key]) {
+              attrMap[key] = new Set();
+            }
+            attrMap[key].add(value);
+          });
+        }
+      });
+    }
+    const result = {};
+    Object.keys(attrMap).forEach((key) => {
+      result[key] = Array.from(attrMap[key]);
+    });
+    return result;
+  }, [product]);
+
+  const selectedVariant = React.useMemo(() => {
+    if (!product?.variants || product.variants.length === 0) return null;
+    return product.variants.find((variant) => {
+      if (!variant.attributes) return false;
+      return (
+        Object.keys(selectedAttributes).length > 0 &&
+        Object.entries(selectedAttributes).every(
+          ([key, value]) => variant.attributes[key] === value,
+        )
+      );
+    });
+  }, [product, selectedAttributes]);
+
+  useEffect(() => {
+    setActiveImage(0);
+  }, [selectedVariant]);
+
+  const handleAttributeSelect = (attrName, val) => {
+    setSelectedAttributes((prev) => {
+      const tentative = { ...prev, [attrName]: val };
+
+      // 1. Check if tentative is a subset of any variant's attributes
+      const exactMatch = product?.variants?.find((v) => {
+        if (!v.attributes) return false;
+        return Object.entries(tentative).every(
+          ([k, vVal]) => v.attributes[k] === vVal,
+        );
+      });
+
+      if (exactMatch) {
+        return exactMatch.attributes;
+      }
+
+      // 2. If no exact match, find the first variant that has the clicked attribute
+      const fallbackVariant = product?.variants?.find(
+        (v) => v.attributes && v.attributes[attrName] === val,
+      );
+
+      if (fallbackVariant) {
+        return fallbackVariant.attributes;
+      }
+
+      return tentative;
+    });
+  };
 
   /* fetch */
   useEffect(() => {
@@ -129,9 +204,10 @@ const Product = () => {
   const increaseQty = () => setQuantity((q) => Math.min(99, q + 1));
 
   /* CTA handlers */
-  const handleAddToCart = () => {
+  const handleAddToCart = (productId, variantId) => {
     if (user) {
       setAddedToCart(true);
+      handleAddItem({ productId, variantId });
       setTimeout(() => setAddedToCart(false), 2000);
     } else {
       navigate("/login");
@@ -167,7 +243,6 @@ const Product = () => {
   if (loading)
     return (
       <>
-        <Navbar />
         <ProductSkeleton />
       </>
     );
@@ -175,7 +250,6 @@ const Product = () => {
   if (!product) {
     return (
       <>
-        <Navbar />
         <div className="bg-[#131313] min-h-screen flex items-center justify-center">
           <div className="text-center">
             <p className="font-serif text-[40px] font-bold text-white mb-4">
@@ -198,8 +272,13 @@ const Product = () => {
   }
 
   const images =
-    product.images && product.images.length > 0 ? product.images : [];
+    selectedVariant?.images?.length > 0
+      ? selectedVariant.images
+      : product.images && product.images.length > 0
+        ? product.images
+        : [];
   const currentImageUrl = images[activeImage]?.url;
+  const displayPrice = selectedVariant?.price || product.price;
 
   return (
     <>
@@ -258,8 +337,6 @@ const Product = () => {
           padding: 4px 10px;
         }
       `}</style>
-
-      <Navbar />
 
       <div
         className="bg-[#131313] min-h-screen text-[#e5e2e1]"
@@ -376,7 +453,7 @@ const Product = () => {
                   className="text-[32px] font-bold text-[#f5c518]"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  {formatPrice(product.price)}
+                  {formatPrice(displayPrice)}
                 </p>
                 <span className="font-sans text-xs text-[#9a9078] uppercase tracking-widest">
                   Incl. of all taxes
@@ -393,6 +470,40 @@ const Product = () => {
 
               {/* Divider */}
               <div className="border-t border-white/10" />
+
+              {/* Variants / Attributes */}
+              {Object.keys(availableAttributes).length > 0 && (
+                <div className="space-y-4">
+                  {Object.entries(availableAttributes).map(
+                    ([attrName, values]) => (
+                      <div key={attrName}>
+                        <span className="font-sans text-sm uppercase tracking-widest text-[#9a9078] mb-2 block">
+                          {attrName}
+                        </span>
+                        <div className="flex flex-wrap gap-3">
+                          {values.map((val) => (
+                            <button
+                              key={val}
+                              onClick={() =>
+                                handleAttributeSelect(attrName, val)
+                              }
+                              className={`px-4 py-2 font-sans text-sm tracking-wide border transition-all duration-300 ${
+                                selectedAttributes[attrName] === val
+                                  ? "border-[#f5c518] text-[#f5c518] bg-[#f5c518]/10"
+                                  : "border-white/10 text-[#e5e2e1] hover:border-white/30"
+                              }`}
+                            >
+                              {val}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ),
+                  )}
+                  {/* Divider */}
+                  <div className="border-t border-white/10 mt-6" />
+                </div>
+              )}
 
               {/* Quantity */}
               <div className="flex items-center justify-between">
@@ -462,7 +573,9 @@ const Product = () => {
                 {/* Add to Cart */}
                 <button
                   id="add-to-cart-btn"
-                  onClick={handleAddToCart}
+                  onClick={() =>
+                    handleAddToCart(productId, selectedVariant?._id)
+                  }
                   className="w-full py-5 bg-transparent border border-[#f5c518] text-[#ffe5a0] font-sans text-sm font-semibold uppercase tracking-widest hover:bg-[#f5c518]/10 transition-all duration-300 active:scale-[0.99]"
                   disabled={addedToCart}
                 >

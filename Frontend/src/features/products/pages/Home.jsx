@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useProduct } from "../hook/useProduct";
-import Navbar from "../components/Navbar";
+import Navbar from "../../shared/components/Navbar";
 import { useNavigate } from "react-router";
 
 const Home = () => {
@@ -15,7 +15,6 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
       <div className="bg-[#131313] min-h-screen text-[#e5e2e1] font-sans overflow-x-hidden">
         {/* Hero Section */}
         <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">

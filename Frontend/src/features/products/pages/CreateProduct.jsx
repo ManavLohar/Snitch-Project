@@ -69,42 +69,6 @@ const CreateProduct = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-[#e5e2e1] antialiased">
-      {/* ── Top Nav ── */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-16 h-20 bg-[#131313]/80 backdrop-blur-xl border-b border-white/5">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="text-[#e5e2e1] hover:text-[#F5C518] transition-colors flex items-center justify-center p-2 rounded-full focus:outline-none"
-          aria-label="Go back"
-        >
-          {/* Arrow Back SVG */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.8}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-            />
-          </svg>
-        </button>
-
-        <span
-          className="text-[#F5C518] text-2xl tracking-tighter"
-          style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
-        >
-          SNITCH
-        </span>
-
-        {/* spacer */}
-        <div className="w-9" />
-      </header>
-
       {/* ── Main Form Canvas ── */}
       <main className="pt-28 pb-24 px-4 md:px-6 w-full max-w-[700px] mx-auto">
         {/* Page Title */}
