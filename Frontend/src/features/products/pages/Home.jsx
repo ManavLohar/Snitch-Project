@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useProduct } from "../hook/useProduct";
-import Navbar from "../../shared/components/Navbar";
 import { useNavigate } from "react-router";
 
 const Home = () => {

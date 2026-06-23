@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useCart } from "../hook/useCart";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
+import { useCart } from "../hook/useCart";
+import { removeItem } from "../states/cart.slice";
 
 const Cart = () => {
-  const { handleGetItems } = useCart();
+  const dispatch = useDispatch();
+  const {
+    handleIncrementCartItemQuantity,
+    handleDecrementCartItemQuantity,
+    handleRemoveItem,
+  } = useCart();
   const cartItemsData = useSelector((state) => state.cart.items);
-
-  useEffect(() => {
-    handleGetItems();
-  }, []);
 
   const items = Array.isArray(cartItemsData[0])
     ? cartItemsData[0]
@@ -21,6 +22,21 @@ const Cart = () => {
       (total, item) => total + (item.price?.amount || 0) * (item.quantity || 1),
       0,
     );
+  };
+
+  const incrementCartItem = (productId, variantId) => {
+    handleIncrementCartItemQuantity({ productId, variantId });
+  };
+
+  const decrementCartItem = (productId, variantId) => {
+    handleDecrementCartItemQuantity({ productId, variantId });
+  };
+
+  const removeItemFromCart = (productId, variantId) => {
+    handleRemoveItem({
+      productId,
+      variantId,
+    });
   };
 
   const subtotal = calculateSubtotal();
@@ -67,6 +83,7 @@ const Cart = () => {
                   const variantInfo = product?.variants?.find(
                     (v) => v._id === item.variant,
                   );
+                  const variantPrice = variantInfo?.price;
                   const displayImage =
                     variantInfo?.images?.[0]?.url || product?.images?.[0]?.url;
 
@@ -107,7 +124,31 @@ const Cart = () => {
                             )}
                           </div>
 
-                          <button className="text-sm text-[#e5e2e1]/60 hover:text-red-400 w-fit mt-6 flex items-center gap-1.5 transition-colors uppercase tracking-wider font-medium text-[11px]">
+                          {variantPrice.amount !== item.price.amount &&
+                          variantPrice.amount > item.price.amount ? (
+                            <p className="font-bold tracking-wider uppercase text-xs text-red-400 mt-2">
+                              This product will cost you {variantPrice.currency}{" "}
+                              {variantPrice.amount - item.price.amount} more
+                            </p>
+                          ) : variantPrice.amount < item.price.amount ? (
+                            <p className="font-bold tracking-wider uppercase text-xs text-green-400 mt-2">
+                              You will get this at {variantPrice.currency}{" "}
+                              {variantPrice.amount} save{" "}
+                              {item.price.amount - variantPrice.amount}
+                            </p>
+                          ) : (
+                            ""
+                          )}
+
+                          <button
+                            onClick={() =>
+                              removeItemFromCart(
+                                item?.product._id,
+                                item?.variant,
+                              )
+                            }
+                            className="text-sm text-[#e5e2e1]/60 hover:text-red-400 w-fit mt-6 flex items-center gap-1.5 transition-colors uppercase tracking-wider font-medium text-[11px]"
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="14"
@@ -133,13 +174,29 @@ const Cart = () => {
                       {/* Quantity */}
                       <div className="col-span-1 md:col-span-2 flex justify-start md:justify-center items-center mt-2 md:mt-0">
                         <div className="flex items-center border border-white/10 rounded-lg overflow-hidden bg-[#0A0A0A]">
-                          <button className="px-3.5 py-1.5 hover:bg-white/10 transition-colors text-lg text-[#a1a1aa] hover:text-white">
+                          <button
+                            onClick={() =>
+                              decrementCartItem(
+                                item?.product._id,
+                                item?.variant,
+                              )
+                            }
+                            className="px-3.5 py-1.5 hover:bg-white/10 transition-colors text-lg text-[#a1a1aa] hover:text-white"
+                          >
                             −
                           </button>
                           <span className="px-3 py-1.5 font-medium text-sm w-8 text-center">
                             {item.quantity}
                           </span>
-                          <button className="px-3.5 py-1.5 hover:bg-white/10 transition-colors text-lg text-[#a1a1aa] hover:text-white">
+                          <button
+                            onClick={() =>
+                              incrementCartItem(
+                                item?.product._id,
+                                item?.variant,
+                              )
+                            }
+                            className="px-3.5 py-1.5 hover:bg-white/10 transition-colors text-lg text-[#a1a1aa] hover:text-white"
+                          >
                             +
                           </button>
                         </div>

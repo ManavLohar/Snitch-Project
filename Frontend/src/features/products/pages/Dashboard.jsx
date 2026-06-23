@@ -20,6 +20,7 @@ const Dashboard = () => {
         minHeight: "100vh",
         padding: "32px",
         fontFamily: "'Inter', sans-serif",
+        paddingTop: "100px"
       }}
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>

@@ -13,6 +13,27 @@ export const addItem = async ({ productId, variantId }) => {
   return response.data;
 };
 
+export const incrementCartItemQuantity = async ({ productId, variantId }) => {
+  const response = await cartApiInstance.patch(
+    `/quantity/increment/${productId}/${variantId}`,
+  );
+  return response.data;
+};
+
+export const decrementCartItemQuantity = async ({ productId, variantId }) => {
+  const response = await cartApiInstance.patch(
+    `/quantity/decrement/${productId}/${variantId}`,
+  );
+  return response.data;
+};
+
+export const removeCartItem = async ({ productId, variantId }) => {
+  const response = await cartApiInstance.patch(
+    `/remove/${productId}/${variantId}`,
+  );
+  return response.data;
+};
+
 export const getItems = async () => {
   const response = await cartApiInstance.get("/");
   return response.data;

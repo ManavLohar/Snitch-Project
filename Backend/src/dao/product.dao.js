@@ -10,5 +10,5 @@ export const stockOfVariant = async (productId, variantId) => {
     (variant) => variant._id.toString() === variantId,
   );
 
-  return stock;
+  return stock.stock;
 };

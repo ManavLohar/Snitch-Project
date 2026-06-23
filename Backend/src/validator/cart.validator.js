@@ -17,3 +17,15 @@ export const validateAddToCart = [
     .withMessage("Quantity must be at least 1"),
   validateRequest,
 ];
+
+export const validateIncrementCartItemQuantity = [
+  param("productId").isMongoId().withMessage("Invalid product Id!"),
+  param("variantId").optional().isMongoId().withMessage("Invalid variantId"),
+  validateRequest,
+];
+
+export const validateRemoveCartItem = [
+  param("productId").isMongoId().withMessage("Invalid product Id!"),
+  param("variantId").optional().isMongoId().withMessage("Invalid variantId"),
+  validateRequest,
+];

@@ -291,10 +291,10 @@ const AddVariantForm = ({ productId, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (!priceAmount) {
-      setError("Price amount is required.");
-      return;
-    }
+    // if (!priceAmount) {
+    //   setError("Price amount is required.");
+    //   return;
+    // }
 
     setLoading(true);
     try {
@@ -435,7 +435,7 @@ const AddVariantForm = ({ productId, onSuccess }) => {
               placeholder="e.g. 1999"
               value={priceAmount}
               onChange={(e) => setPriceAmount(e.target.value)}
-              required
+              // required
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -691,39 +691,8 @@ const SellerProductsDetails = () => {
 
   return (
     <div className="bg-[#131313] text-[#e5e2e1] min-h-screen pb-20">
-      {/* ── Top Nav ── */}
-      <header className="sticky top-0 z-50 flex items-center justify-between px-8 h-[72px] bg-[#131313]/90 backdrop-blur-md border-b border-white/10">
-        <button
-          onClick={() => navigate("/seller/dashboard")}
-          className="flex items-center gap-2 bg-transparent border-none text-[#d1c5ac] hover:text-[#f5c518] transition-colors p-2 rounded-lg text-sm cursor-pointer"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.8}
-            stroke="currentColor"
-            width="18"
-            height="18"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-            />
-          </svg>
-          Dashboard
-        </button>
-
-        <span className="font-['Playfair_Display',serif] text-[22px] font-bold text-[#f5c518] tracking-tight">
-          SNITCH
-        </span>
-
-        <div className="w-[100px]" />
-      </header>
-
       {/* ── Page Content ── */}
-      <main className="max-w-[1280px] mx-auto px-8 pt-10">
+      <main className="max-w-[1280px] mx-auto px-8 pt-28">
         {/* ── Product Overview Card ── */}
         <section className="flex flex-col md:flex-row gap-8 bg-[#1c1b1b] border border-white/10 rounded-2xl overflow-hidden mb-14">
           {/* Image */}
