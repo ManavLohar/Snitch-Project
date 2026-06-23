@@ -10,6 +10,7 @@ import {
   decrementCartitem,
   incrementCartitem,
   insertItem,
+  setCart,
   insertItems,
   removeItem,
 } from "../states/cart.slice";
@@ -19,11 +20,11 @@ export const useCart = () => {
 
   const handleGetItems = async () => {
     const data = await getItems();
-    dispatch(insertItems(data.cart.items));
+    dispatch(setCart(data.cart[0]));
   };
 
-  const handleAddItem = async ({ productId, variantId }) => {
-    const data = await addItem({ productId, variantId });
+  const handleAddItem = async ({ productId, variantId, quantity }) => {
+    const data = await addItem({ productId, variantId, quantity });
     handleGetItems();
     dispatch(insertItem(data.cartItem));
     return data;
@@ -32,17 +33,20 @@ export const useCart = () => {
   const handleIncrementCartItemQuantity = async ({ productId, variantId }) => {
     const data = await incrementCartItemQuantity({ productId, variantId });
     dispatch(incrementCartitem({ productId, variantId }));
+    handleGetItems();
   };
 
   const handleDecrementCartItemQuantity = async ({ productId, variantId }) => {
     const data = await decrementCartItemQuantity({ productId, variantId });
     dispatch(decrementCartitem({ productId, variantId }));
+    handleGetItems();
   };
 
   const handleRemoveItem = async ({ productId, variantId }) => {
     const data = await removeCartItem({ productId, variantId });
     handleGetItems();
     dispatch(removeItem({ productId, variantId }));
+    handleGetItems();
     return data;
   };
 

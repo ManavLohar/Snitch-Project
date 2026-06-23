@@ -207,7 +207,7 @@ const Product = () => {
   const handleAddToCart = (productId, variantId) => {
     if (user) {
       setAddedToCart(true);
-      handleAddItem({ productId, variantId });
+      handleAddItem({ productId, variantId, quantity });
       setTimeout(() => setAddedToCart(false), 2000);
     } else {
       navigate("/login");

@@ -7,13 +7,11 @@ import { useCart } from "../../cart/hook/useCart";
 const Navbar = () => {
   const { handleGetItems } = useCart();
   const user = useSelector((state) => state.auth.user);
-  const cartItemsData = useSelector((state) => state.cart.items);
+  const cartItemsData = useSelector((state) => state.cart);
   useEffect(() => {
     handleGetItems();
   }, []);
-  const items = Array.isArray(cartItemsData[0])
-    ? cartItemsData[0]
-    : cartItemsData;
+  const items = cartItemsData.items ? cartItemsData.items : cartItemsData;
   const cartItemCount = items?.length || 0;
 
   return (

@@ -11,18 +11,19 @@ const Cart = () => {
     handleRemoveItem,
   } = useCart();
   const cartItemsData = useSelector((state) => state.cart.items);
+  const total = useSelector((state) => state.cart.totalPrice);
 
   const items = Array.isArray(cartItemsData[0])
     ? cartItemsData[0]
     : cartItemsData;
 
-  const calculateSubtotal = () => {
-    if (!items || items.length === 0) return 0;
-    return items.reduce(
-      (total, item) => total + (item.price?.amount || 0) * (item.quantity || 1),
-      0,
-    );
-  };
+  // const calculateSubtotal = () => {
+  //   if (!items || items.length === 0) return 0;
+  //   return items.reduce(
+  //     (total, item) => total + (item.price?.amount || 0) * (item.quantity || 1),
+  //     0,
+  //   );
+  // };
 
   const incrementCartItem = (productId, variantId) => {
     handleIncrementCartItemQuantity({ productId, variantId });
@@ -39,9 +40,9 @@ const Cart = () => {
     });
   };
 
-  const subtotal = calculateSubtotal();
+  // const subtotal = calculateSubtotal();
   const shipping = 0; // Complimentary shipping
-  const total = subtotal + shipping;
+  // const total = subtotal + shipping;
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#e5e2e1] pb-12 md:pb-20 md:pt-28 px-4 sm:px-8 md:px-16">
@@ -80,10 +81,8 @@ const Cart = () => {
               <div className="space-y-6">
                 {items.map((item) => {
                   const product = item.product;
-                  const variantInfo = product?.variants?.find(
-                    (v) => v._id === item.variant,
-                  );
-                  const variantPrice = variantInfo?.price;
+                  const variantInfo = product?.variants;
+                  const variantPrice = variantInfo.price;
                   const displayImage =
                     variantInfo?.images?.[0]?.url || product?.images?.[0]?.url;
 
@@ -239,13 +238,13 @@ const Cart = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-[#a1a1aa]">Subtotal</span>
                     <span className="font-medium text-[#e5e2e1]">
-                      INR {subtotal.toLocaleString()}
+                      INR {total.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-[#a1a1aa]">Shipping</span>
                     <span className="font-medium text-[#f5c518]">
-                      {shipping === 0
+                      {shipping === 0 || shipping == undefined
                         ? "Complimentary"
                         : `INR ${shipping.toLocaleString()}`}
                     </span>

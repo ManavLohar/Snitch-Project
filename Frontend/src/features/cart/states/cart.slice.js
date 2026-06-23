@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  totalPrice: null,
+  currency: null,
   items: [],
 };
 
@@ -9,17 +11,20 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     setCart: (state, action) => {
-      state.items = action.payload;
+      const { items, totalPrice, currency } = action.payload;
+      state.items = items;
+      state.totalPrice = totalPrice;
+      state.currency = currency;
     },
     insertItems: (state, action) => {
       state.items.push(action.payload);
     },
     insertItem: (state, action) => {
-      state.items[0].push(action.payload);
+      state.items.push(action.payload);
     },
     incrementCartitem: (state, action) => {
       const { productId, variantId } = action.payload;
-      state.items[0] = state.items[0].map((item) => {
+      state.items = state.items.map((item) => {
         if (item.product._id === productId && item.variant === variantId) {
           return { ...item, quantity: item.quantity + 1 };
         } else {
@@ -29,7 +34,7 @@ const cartSlice = createSlice({
     },
     decrementCartitem: (state, action) => {
       const { productId, variantId } = action.payload;
-      state.items[0] = state.items[0].map((item) => {
+      state.items = state.items.map((item) => {
         if (item.product._id === productId && item.variant === variantId) {
           return { ...item, quantity: item.quantity - 1 };
         } else {
@@ -39,7 +44,7 @@ const cartSlice = createSlice({
     },
     removeItem: (state, action) => {
       const { productId, variantId } = action.payload;
-      state.items[0] = state.items[0].filter(
+      state.items = state.items.filter(
         (item) => item.product._id !== productId || item.variant !== variantId,
       );
     },
